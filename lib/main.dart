@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'splash_screen.dart';
 
 void main() {
   runApp(const GramaSevaApp());
@@ -16,7 +17,7 @@ class GramaSevaApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Roboto', // Make sure to configure fonts in pubspec.yaml if customized
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }
