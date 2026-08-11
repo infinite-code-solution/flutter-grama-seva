@@ -66,6 +66,14 @@ flutter:
     - assets/images/background.jpg
     - assets/images/background.png
     - assets/app_icon.png
+    - assets/images/food.jpg
+    - assets/images/grocery.jpg
+    - assets/images/pharmacy.jpg
+    - assets/images/shopping.jpg
+    - assets/images/house_rent.jpg
+    - assets/images/hotels/
+    - assets/images/restaurants/
+    - assets/images/food/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
