@@ -9,6 +9,15 @@ class EnterOwnAddressScreen extends StatefulWidget {
 
 class _EnterOwnAddressScreenState extends State<EnterOwnAddressScreen> {
   String selectedType = 'Home';
+  String? selectedState;
+  String? selectedDistrict;
+  String? selectedMandal;
+  String? selectedVillage;
+
+  final List<String> states = ['Andhra Pradesh', 'Karnataka', 'Kerala', 'Tamil Nadu', 'Telangana'];
+  final List<String> districts = ['Bengaluru Urban', 'Mysuru', 'Mangaluru', 'Hubballi', 'Belagavi'];
+  final List<String> mandals = ['Yelahanka', 'Whitefield', 'Koramangala', 'Indiranagar', 'Jayanagar'];
+  final List<String> villages = ['Marathahalli', 'Bellandur', 'HSR Layout', 'BTM Layout', 'Electronic City'];
 
   Widget buildTypeButton(String type, IconData icon) {
     bool isSelected = selectedType == type;
@@ -41,27 +50,51 @@ class _EnterOwnAddressScreenState extends State<EnterOwnAddressScreen> {
     );
   }
 
-  Widget buildTextField(String hint, {bool isMandatory = false}) {
+  Widget buildRealDropdownField(String hint, IconData icon, List<String> items, String? selectedValue, ValueChanged<String?> onChanged) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: TextField(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: DropdownButtonFormField<String>(
+        value: selectedValue,
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: Colors.black54),
-          suffixIcon: isMandatory
-              ? const Padding(
-                  padding: EdgeInsets.only(right: 12, top: 14),
-                  child: Text('*', style: TextStyle(color: Colors.red, fontSize: 16)),
-                )
-              : null,
+          prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 20),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade200),
+            borderSide: BorderSide(color: Colors.blue.shade900.withOpacity(0.4)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: Colors.blue.shade900),
+          ),
+        ),
+        icon: Icon(Icons.arrow_drop_down, color: Colors.grey.shade600),
+        items: items.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value, style: const TextStyle(color: Colors.black87, fontSize: 14)),
+          );
+        }).toList(),
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+  Widget buildInputField(String hint, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: hint,
+          prefixIcon: Icon(icon, color: Colors.grey.shade600, size: 20),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.blue.shade900.withOpacity(0.4)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.blue.shade900),
           ),
         ),
       ),
@@ -111,29 +144,15 @@ class _EnterOwnAddressScreenState extends State<EnterOwnAddressScreen> {
             ),
             const SizedBox(height: 16),
             
-            buildTextField('Complete Address / Street name', isMandatory: true),
-            buildTextField('Flat / House no / Floor / Building', isMandatory: true),
-            buildTextField('Landmark (Optional)'),
-            buildTextField('Pincode', isMandatory: true),
-            buildTextField('City', isMandatory: true),
+            buildRealDropdownField('Select State', Icons.location_on, states, selectedState, (val) => setState(() => selectedState = val)),
+            buildRealDropdownField('Select District/City', Icons.domain, districts, selectedDistrict, (val) => setState(() => selectedDistrict = val)),
+            buildRealDropdownField('Select Mandal/Town', Icons.account_balance, mandals, selectedMandal, (val) => setState(() => selectedMandal = val)),
+            buildRealDropdownField('Select Village', Icons.home, villages, selectedVillage, (val) => setState(() => selectedVillage = val)),
             
-            const SizedBox(height: 24),
-            
-            const Text(
-              'Delivery Instructions (Optional)',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: 'E.g. Leave at the door, beware of dog...',
-                hintStyle: const TextStyle(color: Colors.black45, fontSize: 13),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey.shade200)),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: Colors.grey.shade300)),
-              ),
-            ),
+            buildInputField('Enter Street Name', Icons.edit_road),
+            buildInputField('Enter Door Number', Icons.format_list_numbered),
+            buildInputField('Enter Building Name', Icons.business),
+            buildInputField('Enter Pincode', Icons.pin_drop_outlined),
             
             const SizedBox(height: 100), // padding for bottom button
           ],
