@@ -6,7 +6,8 @@ import 'delivery_address_form_screen.dart';
 import 'enter_own_address_screen.dart';
 import 'carousel_screen.dart';
 import 'categories_screen.dart';
-
+import 'orders_screen.dart';
+import 'account_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -410,9 +411,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[80],
       body: SafeArea(
-        child: Column(
+        child: IndexedStack(
+          index: _selectedIndex,
           children: [
-            // 1. Top Custom Header Section
+            Column(
+              children: [
+                // 1. Top Custom Header Section
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
               child: Row(
@@ -826,6 +830,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+            const OrdersScreen(),
+            const SizedBox.shrink(),
+            const SizedBox.shrink(),
+            const AccountScreen(),
           ],
         ),
       ),
