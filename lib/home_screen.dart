@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'add_address_screen.dart';
 import 'carousel_screen.dart';
 import 'categories_screen.dart';
 
@@ -52,6 +53,196 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void _showLocationBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).padding.bottom,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Map Placeholder
+                Container(
+                  height: 180,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(Icons.map, size: 64, color: Colors.grey[400]),
+                      Positioned(
+                        bottom: 16,
+                        right: 16,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.my_location, size: 16, color: Colors.black87),
+                              SizedBox(width: 4),
+                              Text('Locate me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                
+                // Delivery Address Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Delivery address',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        // Close the bottom sheet first
+                        Navigator.pop(context);
+                        // Then navigate to the add address screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AddAddressScreen()),
+                        );
+                      },
+                      icon: const Icon(Icons.add, size: 18, color: Colors.black87),
+                      label: const Text('New address', style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                
+                // Address Card 1 (Selected)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBE6), // Light yellow background
+                    border: Border.all(color: const Color(0xFFFFE066)), // Yellow border
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.work_outline, size: 20, color: Colors.black87),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text('Work', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                            SizedBox(height: 4),
+                            Text(
+                              'Tech Park, Whitefield, Bengaluru',
+                              style: TextStyle(fontSize: 13, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.edit_outlined, size: 20, color: Colors.black54),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                
+                // Address Card 2 (Unselected)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.home_outlined, size: 20, color: Colors.black87),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text('Home', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                            SizedBox(height: 4),
+                            Text(
+                              '123 Main St. Bengaluru, Karnataka',
+                              style: TextStyle(fontSize: 13, color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.edit_outlined, size: 20, color: Colors.black54),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Confirm Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFD700), // Yellow button
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    child: const Text(
+                      'Confirm address',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,35 +265,44 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   // Address / Location Component
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.grey,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 4),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            '123 Main St. Bengaluru,',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black87,
+                  GestureDetector(
+                    onTap: () => _showLocationBottomSheet(context),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 4),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              '123 Main St. Bengaluru,',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black87,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Karnataka 560001',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500,
+                            Text(
+                              'Karnataka 560001',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
