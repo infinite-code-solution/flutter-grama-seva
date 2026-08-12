@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'add_address_screen.dart';
+import 'delivery_address_form_screen.dart';
+import 'enter_own_address_screen.dart';
 import 'carousel_screen.dart';
 import 'categories_screen.dart';
 
@@ -127,11 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         // Close the bottom sheet first
                         Navigator.pop(context);
-                        // Then navigate to the add address screen
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const AddAddressScreen()),
-                        );
+                        _showAddressMethodDialog(context);
                       },
                       icon: const Icon(Icons.add, size: 18, color: Colors.black87),
                       label: const Text('New address', style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)),
@@ -238,6 +236,170 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showAddressMethodDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int selectedOption = 1;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Choose Your Role',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Select one option to proceed.',
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 20),
+                    
+                    // Option 1
+                    GestureDetector(
+                      onTap: () => setState(() => selectedOption = 1),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: selectedOption == 1 ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: selectedOption == 1 ? Colors.transparent : Colors.grey.shade300,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              selectedOption == 1 ? Icons.check_circle : Icons.radio_button_unchecked,
+                              color: selectedOption == 1 ? Colors.blue : Colors.grey,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Enter Own Address',
+                                    style: TextStyle(
+                                      color: selectedOption == 1 ? Colors.blue.shade900 : Colors.black87,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Type your address manually',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: selectedOption == 1 ? Colors.blue.shade700 : Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // Option 2
+                    GestureDetector(
+                      onTap: () => setState(() => selectedOption = 2),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: selectedOption == 2 ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: selectedOption == 2 ? Colors.transparent : Colors.grey.shade300,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              selectedOption == 2 ? Icons.check_circle : Icons.radio_button_unchecked,
+                              color: selectedOption == 2 ? Colors.blue : Colors.grey,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Select From Google Map',
+                                    style: TextStyle(
+                                      color: selectedOption == 2 ? Colors.blue.shade900 : Colors.black87,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Pick your location on map',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: selectedOption == 2 ? Colors.blue.shade700 : Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel', style: TextStyle(color: Colors.teal)),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); // Close dialog
+                            if (selectedOption == 1) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const EnterOwnAddressScreen()),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const AddAddressScreen()),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                          ),
+                          child: const Text('SELECT', style: TextStyle(color: Colors.white)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
