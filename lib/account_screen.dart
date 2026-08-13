@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -15,13 +16,15 @@ class AccountScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
               ),
-              padding: const EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 24),
+              padding: const EdgeInsets.only(top: 24, bottom: 24),
               child: Column(
                 children: [
                   // Header (Home page design)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                       // Brand Logo/Name
                       Image.asset(
                         'assets/app_icon.png',
@@ -69,11 +72,14 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  ),
                   const SizedBox(height: 24),
                   // Top 3 cards (Vouchers, Wallet, Orders)
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
@@ -114,6 +120,7 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
                   ),
                 ],
               ),
@@ -177,7 +184,13 @@ class AccountScreen extends StatelessWidget {
             // List Items
             _buildListItem(
               icon: Icons.person_outline,
-              title: 'Rahul',
+              title: 'Rahul Kumar',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                );
+              },
             ),
             _buildListItem(
               icon: Icons.payment,
@@ -245,6 +258,7 @@ class AccountScreen extends StatelessWidget {
     required String title,
     Color? iconColor,
     String? trailingText,
+    VoidCallback? onTap,
   }) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
@@ -267,7 +281,7 @@ class AccountScreen extends StatelessWidget {
           const Icon(Icons.chevron_right, color: Colors.black87),
         ],
       ),
-      onTap: () {},
+      onTap: onTap ?? () {},
     );
   }
 }
