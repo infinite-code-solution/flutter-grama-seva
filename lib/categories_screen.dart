@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({Key? key}) : super(key: key);
+  const CategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,22 @@ class CategoriesScreen extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildCategoryCard('Food\nDelivery', const Text('🍔', style: TextStyle(fontSize: 28))),
-                _buildCategoryCard('Groceries', const Text('🛒', style: TextStyle(fontSize: 28))),
-                _buildCategoryCard('Pharmacy', const Icon(Icons.add_box, color: Colors.teal, size: 32)),
-                _buildCategoryCard('Package\nDelivery', const Text('📦', style: TextStyle(fontSize: 28))),
+                _buildCategoryCard(
+                  'Food\nDelivery',
+                  const Text('🍔', style: TextStyle(fontSize: 28)),
+                ),
+                _buildCategoryCard(
+                  'Groceries',
+                  const Text('🛒', style: TextStyle(fontSize: 28)),
+                ),
+                _buildCategoryCard(
+                  'Pharmacy',
+                  const Icon(Icons.add_box, color: Colors.teal, size: 32),
+                ),
+                _buildCategoryCard(
+                  'Package\nDelivery',
+                  const Text('📦', style: TextStyle(fontSize: 28)),
+                ),
               ],
             ),
           ),
@@ -47,7 +59,7 @@ class CategoriesScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -59,7 +71,10 @@ class CategoriesScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             onTap: () {},
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 4.0,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -69,7 +84,7 @@ class CategoriesScreen extends StatelessWidget {
                     width: 48,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.indigo.withOpacity(0.03),
+                      color: Colors.indigo.withValues(alpha: 0.03),
                       shape: BoxShape.circle,
                     ),
                     child: iconWidget,
