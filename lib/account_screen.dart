@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
+import 'contacts_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -219,6 +220,16 @@ class AccountScreen extends StatelessWidget {
               title: 'Settings',
             ),
             
+            _buildListItem(
+              icon: Icons.contacts_outlined,
+              title: 'Contacts (Test)',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ContactsScreen()),
+                );
+              },
+            ),
             const SizedBox(height: 32),
           ],
         ),
