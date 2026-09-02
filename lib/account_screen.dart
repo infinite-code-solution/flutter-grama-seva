@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:grama_seva/sms_inbox_screen.dart';
 import 'profile_screen.dart';
 import 'contacts_screen.dart';
 import 'location_screen.dart';
+import 'sms_inbox_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -238,6 +240,16 @@ class AccountScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const LocationScreen()),
+                );
+              },
+            ),
+            _buildListItem(
+              icon: Icons.message_outlined,
+              title: 'Read Messages (Test)',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SmsInboxScreen()),
                 );
               },
             ),
