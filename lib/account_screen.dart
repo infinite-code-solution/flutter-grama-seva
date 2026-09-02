@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'contacts_screen.dart';
+import 'location_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -227,6 +228,16 @@ class AccountScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const ContactsScreen()),
+                );
+              },
+            ),
+            _buildListItem(
+              icon: Icons.my_location_outlined,
+              title: 'My Location (Test)',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LocationScreen()),
                 );
               },
             ),
