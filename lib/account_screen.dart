@@ -4,6 +4,7 @@ import 'profile_screen.dart';
 import 'contacts_screen.dart';
 import 'location_screen.dart';
 import 'sms_inbox_screen.dart';
+import 'sims_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -250,6 +251,16 @@ class AccountScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SmsInboxScreen()),
+                );
+              },
+            ),
+            _buildListItem(
+              icon: Icons.sim_card_outlined,
+              title: 'SIMs (Test)',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SimsScreen()),
                 );
               },
             ),
