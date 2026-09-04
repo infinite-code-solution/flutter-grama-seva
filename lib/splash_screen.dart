@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 import 'home_screen.dart';
 import 'dart:async';
+import 'network_utils.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,6 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkInternetAndStartTimer();
+  }
+
+  void _checkInternetAndStartTimer() async {
+    bool isConnected = await NetworkUtils.checkInternetConnection();
+    if (!mounted) return;
+    
+    if (!isConnected) {
+      _showNoInternetDialog();
+      return;
+    }
+
     // Simulate loading progress
     _timer = Timer.periodic(const Duration(milliseconds: 300), (timer) {
       setState(() {
@@ -27,6 +42,33 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     });
+  }
+
+  void _showNoInternetDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('No Internet Connection'),
+        content: const Text('Please check your internet connection and try again.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              SystemNavigator.pop();
+              exit(0);
+            },
+            child: const Text('Exit'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // dismiss dialog
+              _checkInternetAndStartTimer(); // try again
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _navigateToHome() {
