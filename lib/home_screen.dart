@@ -8,6 +8,8 @@ import 'carousel_screen.dart';
 import 'categories_screen.dart';
 import 'orders_screen.dart';
 import 'account_screen.dart';
+import 'file_browser_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -409,6 +411,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.folder),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FileBrowserScreen()),
+          );
+        },
+      ),
       backgroundColor: Colors.grey[80],
       body: SafeArea(
         child: IndexedStack(
