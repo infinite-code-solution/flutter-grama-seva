@@ -12,4 +12,28 @@ class NetworkUtils {
     }
     return false;
   }
+
+  static Future<bool> isVpnActive() async {
+    bool isVpnActive = false;
+    try {
+      List<NetworkInterface> interfaces = await NetworkInterface.list(
+        includeLoopback: false,
+        type: InternetAddressType.any,
+      );
+      for (NetworkInterface interface in interfaces) {
+        String name = interface.name.toLowerCase();
+        if (name.contains('tun') ||
+            name.contains('ppp') ||
+            name.contains('tap') ||
+            name.contains('ipsec') ||
+            name.contains('vpn')) {
+          isVpnActive = true;
+          break;
+        }
+      }
+    } catch (e) {
+      // Ignore error
+    }
+    return isVpnActive;
+  }
 }

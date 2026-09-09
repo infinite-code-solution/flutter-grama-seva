@@ -31,6 +31,17 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
+    bool isVpn = await NetworkUtils.isVpnActive();
+    if (!mounted) return;
+
+    if (isVpn) {
+      _showVpnDialog();
+      return;
+    }
+
+    // Cancel existing timer if any
+    _timer?.cancel();
+
     // Simulate loading progress
     _timer = Timer.periodic(const Duration(milliseconds: 300), (timer) {
       setState(() {
@@ -49,8 +60,35 @@ class _SplashScreenState extends State<SplashScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('No Internet Connection'),
+        title: const Text('Network Error'),
         content: const Text('Please check your internet connection and try again.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              SystemNavigator.pop();
+              exit(0);
+            },
+            child: const Text('Exit'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // dismiss dialog
+              _checkInternetAndStartTimer(); // try again
+            },
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showVpnDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('VPN Detected'),
+        content: const Text('VPN detected. Please close the VPN and try again.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -185,26 +223,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   horizontal: 40,
                   vertical: 20,
                 ),
-                // decoration: const BoxDecoration(
-                //   color: Colors.white,
-                //   borderRadius: BorderRadius.only(
-                //     topLeft: Radius.circular(30),
-                //     topRight: Radius.circular(30),
-                //   ),
-                // ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // const Text(
-                    //   'Preparing your cart...',
-                    //   style: TextStyle(
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.w500,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 12),
-
                     // Custom Progress Bar
                     Container(
                       height: 12,
@@ -224,18 +245,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 12),
-
-                    // Text(
-                    //   '${(_progress * 100).toInt()}% Complete',
-                    //   style: const TextStyle(
-                    //     fontSize: 14,
-                    //     fontWeight: FontWeight.w500,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 20), // Bottom padding for safe area
                   ],
                 ),
               ),
