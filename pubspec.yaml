@@ -38,6 +38,7 @@ dependencies:
   permission_handler: ^11.3.1
   geolocator: ^10.1.0
   open_filex: ^4.7.0
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
