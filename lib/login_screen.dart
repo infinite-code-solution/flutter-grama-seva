@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart'; // Adjust if HomeScreen is located elsewhere
 
 class LoginScreen extends StatefulWidget {
@@ -17,10 +18,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final String _hardcodedEmail = "test@example.com";
   final String _hardcodedPassword = "password123";
+  
+  bool _hasLoggedInBefore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstLogin();
+  }
+
+  Future<void> _checkFirstLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _hasLoggedInBefore = prefs.getBool('hasLoggedInBefore') ?? false;
+    });
+  }
 
   // Attempt login with Email & Password
-  void _loginWithEmail() {
+  Future<void> _loginWithEmail() async {
     if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      // Save that user has logged in before, so next time biometrics show up
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('hasLoggedInBefore', true);
+      
       _navigateToHome();
     } else {
       _showError("Please enter an email and password!");
@@ -31,11 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _loginWithBiometrics() async {
     try {
       final bool canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
-      final bool canAuthenticate =
-          canAuthenticateWithBiometrics || await _auth.isDeviceSupported();
+      final bool canAuthenticate = await _auth.isDeviceSupported();
 
-      if (!canAuthenticate) {
-        _showError("Biometric authentication is not supported on this device.");
+      if (!canAuthenticate && !canAuthenticateWithBiometrics) {
+        _showError("Your device does not support biometrics or has none enrolled.");
         return;
       }
 
@@ -45,9 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (didAuthenticate) {
         _navigateToHome();
+      } else {
+        _showError("Fingerprint authentication canceled or failed.");
       }
     } on PlatformException catch (e) {
-      _showError("Error: ${e.message}");
+      _showError("System Error: ${e.code} - ${e.message}");
+    } catch (e) {
+      _showError("Unknown Error: $e");
     }
   }
 
@@ -108,21 +131,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Login", style: TextStyle(fontSize: 18)),
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Text("OR", style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: OutlinedButton.icon(
-                    onPressed: _loginWithBiometrics,
-                    icon: const Icon(Icons.fingerprint, size: 28),
-                    label: const Text(
-                      "Login with Biometrics",
-                      style: TextStyle(fontSize: 16),
+                if (_hasLoggedInBefore) ...[
+                  const SizedBox(height: 24),
+                  const Text("OR", style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton.icon(
+                      onPressed: _loginWithBiometrics,
+                      icon: const Icon(Icons.fingerprint, size: 28),
+                      label: const Text(
+                        "Login with Biometrics",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
+                ]
               ],
             ),
           ),
