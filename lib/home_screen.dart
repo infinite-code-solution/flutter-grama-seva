@@ -9,6 +9,7 @@ import 'categories_screen.dart';
 import 'orders_screen.dart';
 import 'account_screen.dart';
 import 'file_browser_screen.dart';
+import 'database_viewer_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -411,14 +412,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.folder),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const FileBrowserScreen()),
-          );
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'db_fab',
+            backgroundColor: Colors.blueAccent,
+            child: const Icon(Icons.storage, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DatabaseViewerScreen()),
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'file_fab',
+            child: const Icon(Icons.folder),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FileBrowserScreen()),
+              );
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.grey[80],
       body: SafeArea(
